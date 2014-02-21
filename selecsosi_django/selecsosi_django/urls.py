@@ -13,6 +13,6 @@ urlpatterns = patterns('',
      url(r'^gps/', include('gps.urls')),
      url(r'^zoro/', include('zoro.urls')),
      url(r'^bills/', include('bills.urls')),
-     url(r'^drc/', include('drc.urls')),
+     #url(r'^drc/', include('drc.urls')),
      url(r'^$', include('web.urls')),
 )
