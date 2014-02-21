@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block js_block %}
+{{ block.super }}
+<script src="{{ STATIC_URL }}js/jquery.formset.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('.form-row.inline.{{ tripattr_formset.prefix }}').formset({
+        prefix: '{{ tripattr_formset.prefix }}',
+    });
+})
+</script>
+{% endblock %}
+
+{% block content_block %}
+<h1>Add Trip</h1>
+<form action="/gps/upload" method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="form-row">
+        {{ form.as_p }}
+</div>
+<fieldset class="formset">
+<legend>Trip Attr</legend>
+        {{ tripattr_formset.management_form }}
+        {% for form in tripattr_formset %}
+            {{ form.as_p }}
+        {% endfor %}
+    </fieldset>
+<div class="submit-row">
+        <input type="submit" value="Add trip" class="submit" />
+</div>
+</form>
+{% endblock %}

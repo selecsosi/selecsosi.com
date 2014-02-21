@@ -1,0 +1,50 @@
+<!doctype html><title>Example of firework.js</title>
+<script src="../../build/fireworks-bundle.js"></script>
+<script src="../vendor/tquery-bundle.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	var object	= tQuery.createTorus(0.8, 0.2, 32, 32).scale(2).addTo(world)
+				.rotateZ(1*Math.PI/8);
+
+	world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+
+	var texture	= THREE.ImageUtils.loadTexture("../assets/images/tremulous/psaw/blue_particle.jpg");
+
+	var emitter	= Fireworks.createEmitter({nParticles : 20})
+		.useSpawnerSteadyRate(2)
+		.effectsStackBuilder()
+			.position(Fireworks.createShapePoint(0, 0, 0))
+			.velocity(Fireworks.createShapePoint(0, 0.5, 0))
+			.lifeTime(1)
+			.renderToThreejsObject3D({
+				container	: world,			
+				create		: function(){
+					var object3D	= new THREE.Sprite({
+						map			: texture,
+						useScreenCoordinates	: false,
+						color			: 0xAA4488,
+						blending		: THREE.AdditiveBlending,
+					});
+					var scale	= 1/20;
+					object3D.scale.set(scale, scale, scale)
+					return object3D;
+				}	
+			})
+			.back()
+		.start();
+
+	world.loop().hook(function(delta, now){
+		emitter.update(delta).render();
+	})
+</script></body>
+
+
+
+
+
+
+
+
+
+
+

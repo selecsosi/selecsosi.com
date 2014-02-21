@@ -1,0 +1,13 @@
+{% extends "zoro/fib_base.html" %}
+{% block content_block %}
+<h2>Calculate Fibonacci</h2>
+<form action="/zoro/fib/" method="post">{% csrf_token %}
+<div class="form">
+        {{ form.as_p }}
+</div>
+
+<div class="submit-row">
+    <input type="submit" value="submit" class="submit" />
+</div>
+</form>
+{% endblock %}

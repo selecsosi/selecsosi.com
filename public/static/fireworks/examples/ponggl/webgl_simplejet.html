@@ -1,0 +1,106 @@
+<!doctype html><title>Example of firework.js</title>
+<script src="../vendor/tquery-bundle.js"></script>
+<script src="../../build/fireworks-bundle.js"></script>
+
+<script src="../flamethrower/tquery.textureutils.js"></script>
+<body><script>
+	var world	= tQuery.createWorld().boilerplate().start();
+	world.tRenderer().setClearColorHex( 0x00bbff, world.tRenderer().getClearAlpha() );
+	//world.tRenderer().setClearColorHex( 0x000000, world.tRenderer().getClearAlpha() );
+
+	//world.removeCameraControls()
+	world.tCamera().position.z	= 20;
+
+	var container	= new THREE.Object3D();
+	container.position.y	= -3;
+	world.add(container);
+
+	var url		= "../assets/images/lensflare2.jpg";	
+	//var url	= "../assets/images/tremulous/psaw/blue_particle.jpg";
+	var texture	= THREE.ImageUtils.loadTexture( url, undefined, function(){
+		tQuery.TextureUtils.generateAlphaFromLuminance(texture, 4, 4);
+	});
+
+	var emitter	= Fireworks.createEmitter({nParticles : 50})
+		.bindTriggerDomEvents()
+		.effectsStackBuilder()
+			.spawnerSteadyRate(10)
+			.position(Fireworks.createShapePoint(0, 0, 0))
+			.velocity(Fireworks.createShapeSphere(0, 60, 0, 20), 20)
+			.lifeTime(2, 3)
+			//.randomVelocityDrift(Fireworks.createVector(10,10,0))
+			.acceleration({
+				effectId	: 'gravity',
+				shape		: Fireworks.createShapePoint(0, -30, 0)
+			})
+			.createEffect('ground', {
+					positionY	: 0,
+					restitution	: 0.6
+				}).onUpdate(function(particle, deltaTime){
+					var position	= particle.get('position').vector;
+					var velocity	= particle.get('velocity').vector;
+					if( position.y <= this.opts.positionY ){
+						position.y	= this.opts.positionY;
+						velocity.y	= -velocity.y * this.opts.restitution;
+					}
+				}).back()
+			.createEffect('scale', {
+					origin	: 1/20,
+					gradient: Fireworks.createLinearGradient()
+							.push(0.00, 1.00)
+							.push(0.05, 1.00)
+							.push(0.10, 2.00)
+							.push(0.70, 1.00) 
+							.push(1.00, 0.00)
+				}).onUpdate(function(particle){
+					var object3d	= particle.get('threejsObject3D').object3d;
+					var canonAge	= particle.get('lifeTime').normalizedAge();
+					var scale	= this.opts.gradient.get(canonAge) * this.opts.origin;
+					object3d.scale.set(scale, scale, scale);
+				}).back()
+			.createEffect('rotation')
+				.onBirth(function(particle){
+					var object3d	= particle.get('threejsObject3D').object3d;
+					object3d.rotation	= Math.random()*Math.PI*2;
+				}).back()
+			.createEffect('opacity', {
+					gradient: Fireworks.createLinearGradient()
+							.push(0.00, 0.00)
+							.push(0.05, 1.00)
+							.push(0.95, 1.00) 
+							.push(1.00, 0.00)
+				}).onUpdate(function(particle){
+					var object3d	= particle.get('threejsObject3D').object3d;
+					var canonAge	= particle.get('lifeTime').normalizedAge();
+					object3d.opacity= this.opts.gradient.get(canonAge);
+				}).back()
+			.renderToThreejsObject3D({
+				container	: container,
+				create		: function(){
+					var object3d	= new THREE.Sprite({
+						useScreenCoordinates	: false,
+						map			: texture,
+						transparent		: true
+					});
+					return object3d;
+				}	
+			})
+			.back()
+		.start();
+
+	// update the emitter in rendering loop
+	world.loop().hook(function(delta, now){
+		emitter.update(delta).render();
+	})
+</script></body>
+
+
+
+
+
+
+
+
+
+
+

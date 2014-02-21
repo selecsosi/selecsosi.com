@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=1024, user-scalable=no">
+
+	<title>Zoro Company Meeting 24 May 2013</title>
+	
+	<!-- Required stylesheet -->
+	<link rel="stylesheet" href="/static/deckjs/core/deck.core.css">
+	
+	<!-- Extension CSS files go here. Remove or add as needed. -->
+	<link rel="stylesheet" href="/static/deckjs/extensions/goto/deck.goto.css">
+	<link rel="stylesheet" href="/static/deckjs/extensions/menu/deck.menu.css">
+	<link rel="stylesheet" href="/static/deckjs/extensions/navigation/deck.navigation.css">
+	<link rel="stylesheet" href="/static/deckjs/extensions/status/deck.status.css">
+	<link rel="stylesheet" href="/static/deckjs/extensions/hash/deck.hash.css">
+	<link rel="stylesheet" href="/static/deckjs/extensions/scale/deck.scale.css">
+
+	<!-- Style theme. More available in /themes/style/ or create your own. -->
+	<link rel="stylesheet" href="/static/deckjs/themes/style/web-2.0.css">
+	
+	<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+	<link rel="stylesheet" href="/static/deckjs/themes/transition/horizontal-slide.css">
+		
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
+	<!-- Required Modernizr file -->
+	<script src="/static/deckjs/modernizr.custom.js"></script>
+	<link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/default.min.css">
+	<script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+    <script src="/static/fireworks/build/fireworks-bundle.js"></script>
+</head>
+<body class="deck-container" style="font-size:20px;">
+
+<!-- Begin slides. Just make elements with a class of slide. -->
+
+<section class="slide">
+	<h1>Hello</h1>
+</section>
+
+<section class="slide" style="font-size: 24px">
+    <h2>Agenda for today's meeting</h2>
+    <ul>
+        <li class="slide">
+            Derp
+        </li>
+        <li class="slide">
+            What do I do?
+        </li>
+        <li class="slide">
+            Video
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+	<div>
+		<!--<img src="http://content.screencast.com/users/selecsosi/folders/Jing/media/3fca9539-e5d3-45c3-8348-e9209a4cf5fd/meeting.png">-->
+        <img src="http://content.screencast.com/users/selecsosi/folders/Jing/media/f9169a58-eb1c-4bac-a4b1-daeeef8db328/meeting1.png">
+	</div>
+</section>
+
+<section class="slide">
+    <h2>What do I do?</h2>
+</section>
+<section class="slide">
+    <h2>Software Engineer</h2>
+    <ul>
+        <li class="slide">
+            Write Code
+        </li>
+    </ul>
+</section>
+<section class="slide">
+    <h2>Python</h2>
+    <div class="slide" style="font-size: 12px">
+        <pre>
+            <code>
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+
+def create_3(request):
+    '''
+    Now that we have the participants' ids, we
+    can construct a form that will allow each persons
+    contributions to the bill to be added.
+
+    When the form is posted, we will construct all the proper
+    objects to manage the initial accounting for a bill.
+    '''
+    bill_participants_account_ids = request.session["bill_participants_account_ids"]
+    bill_participants = Account.objects.filter(id__in=bill_participants_account_ids)
+    if request.method == "POST":
+        #Process bill form
+        header_form = BillDetailsHeadForm(request.POST)
+        participation_formset = ParticipationFormset(request.POST, initial=[{'name': x.user.username, 'account_id': x.id} for x in bill_participants])
+        footer_form = BillDetailsFootForm(request.POST)
+        #process form
+        if header_form.is_valid() and participation_formset.is_valid() and footer_form.is_valid():
+            </code>
+        </pre>
+    </div>
+</section>
+<section class="slide">
+    <h2>SQL</h2>
+    <div class="slide" style="font-size: 12px">
+        <pre>
+            <code>
+SET SESSION group_concat_max_len = 1000000;
+# Mark them as in processing
+UPDATE products.pm_ebay as e SET e.dirty = job_id WHERE e.dirty = 1;
+# Now grab the records that are set for this run
+SELECT
+	e.zoro_no,
+	i.grainger_no,
+	i. cpir_brand_name,
+	i.cpir_gis_manufacturer_model_number,
+	CASE WHEN e.searchable_title is NULL THEN i.description WHEN e.searchable_title = '' THEN i.description ELSE e.searchable_title END as searchable_title,
+	e.zoro_tools_store_subcategory,
+	e.ebay_cat_id,
+	CONCAT('http://cloudfront.zorotools.com/product/large/', i.image, '?v=', CAST(NOW() AS SIGNED)) as image,
+	'New' as 'condition',
+	e.tax_category,
+	e.california_prop_65_orange_label,
+	e.california_prop_65_white_label,
+	e.item,
+	e.type,
+	e.material,
+	CAST(CONCAT(GROUP_CONCAT(CASE WHEN an.attr_name = 'Package Quantity' THEN NULL ELSE CONCAT(an.attr_name, '=', ia.attr_value) END SEPARATOR '|'), '|Package Quantity=', i.cpir_package_qty, CASE WHEN cm_item.restricted_states = '' THEN '' ELSE CONCAT('|Restricted States=', cm_item.restricted_states) END) as CHAR(10000000)) AS attributes
+	FROM products.pm_ebay AS e
+	LEFT OUTER JOIN products.pm_item as i ON e.zoro_no = i.zoro_no
+	LEFT OUTER JOIN products.pm_item_attr_value AS ia ON i.item_code = ia.item_code
+	LEFT OUTER JOIN products.pm_attr_name AS an ON an.attr_code = ia.attr_code
+	LEFT OUTER JOIN cpir.cm_item as cm_item on cm_item.product_id = i.grainger_no
+	WHERE e.dirty = job_id
+	GROUP BY e.zoro_no;
+            </code>
+        </pre>
+    </div>
+</section>
+<section class="slide">
+    <h2>Javascript</h2>
+    <div class="slide" style="font-size: 12px">
+        <pre>
+            <code>
+;(function($) {
+    // using jQuery
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = $.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+})(django.jQuery);
+            </code>
+        </pre>
+    </div>
+</section>
+<section class="slide">
+    <h2>Javascript</h2>
+    <div id="canvas-wrapper">
+        <canvas></canvas>
+    </div>
+
+</section>
+<section class="slide">
+    <h2>Software Engineer</h2>
+    <ul>
+        <li>
+            Write Code
+        </li>
+        <li class="slide">
+            What am I building?
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2>Why program?</h2>
+    <ul>
+        <li class="slide">
+            Great business idea, but would be tedious/error prone to do manually
+        </li>
+        <li class="slide">
+            Huge data sets that would make it unwieldly (not just 100k rows, gigabytes of data
+        </li>
+        <li class="slide">
+            Contrived Example
+        </li>
+        <li class="slide">
+            Lets use fibonacci numbers, because they are special to help determine how to distribute marketing materials to random people in our db
+        </li>
+        <li class="slide">
+            Fibonacci Formula: a<sub>n</sub> = a<sub>n-2</sub> + a<sub>n-1</sub>
+        </li>
+        <li class="slide">
+            First couple fibonacci numbers
+        </li>
+        <li class="slide">
+            0 1 1 2 3 5 8 13 21 34 55 89
+        </li>
+        <li class="slide">
+            <a href="" target="_blank">How do I calculate the Fibonacci Numbers?</a>
+        </li>
+        <li class="slide">
+            <a href="" target="_blank">How do I calculate the Fibonacci Numbers?</a>
+        </li>
+        <li class="slide">
+            <a href="http://lmgtfy.com/?q=calculate+Fibonacci+numbers" target="_blank">How do I calculate the Fibonacci Numbers?</a>
+        </li>
+    </ul>
+    <h2>Why web apps/sites?</h2>
+
+    <h2>Past/Current/Future Projects</h2>
+    <ul>
+        <li class="slide">
+            Ebay, Zoro Product Management (Django)
+        </li>
+        <li class="slide">
+            What am I building?
+        </li>
+    </ul>
+</section>
+
+<section class="slide">
+	<h1>Anything else?</h1>
+</section>
+
+<section class="slide">
+	<h2>Video</h2>
+</section>
+<section class="slide">
+	<iframe width="560" height="315" src="http://www.youtube.com/embed/PKffm2uI4dk" frameborder="0" allowfullscreen></iframe>
+</section>
+<!-- End slides. -->
+
+
+<!-- Begin extension snippets. Add or remove as needed. -->
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- End extension snippets. -->
+
+
+<!-- Required JS files. -->
+
+<script src="/static/deckjs/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="/static/deckjs/core/deck.core.js"></script>
+<script src="/static/deckjs/extensions/hash/deck.hash.js"></script>
+<script src="/static/deckjs/extensions/menu/deck.menu.js"></script>
+<script src="/static/deckjs/extensions/goto/deck.goto.js"></script>
+<script src="/static/deckjs/extensions/status/deck.status.js"></script>
+<script src="/static/deckjs/extensions/navigation/deck.navigation.js"></script>
+<script src="/static/deckjs/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+	$(function() {
+		$.deck('.slide');
+	});
+</script>
+
+<!-- Fireworks -->
+<script>
+    $(function() {
+        // build canvas element
+        var canvas	= $("#canvas-wrapper").find("canvas")[0];
+        canvas.width	= window.innerWidth / 1.5;
+        canvas.height	= window.innerHeight / 1.5;
+        //document.body.appendChild(canvas);
+        // canvas.style
+        canvas.style.position	= "absolute";
+        canvas.style.left	= window.innerWidth * 2 / 6;
+        canvas.style.top	= window.innerHeight * 2 / 6;
+        // setup ctx
+        var ctx		= canvas.getContext('2d');
+
+        // clear canvas and center it
+        ctx.fillStyle	= 'rgba(0,0,0,1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalAlpha			= 0.5;
+        ctx.globalCompositeOperation	= 'lighter';
+
+        var urls	= [
+            "/static/fireworks/examples/assets/images/flame/flame00.png",
+            "/static/fireworks/examples/assets/images/flame/flame01.png",
+            "/static/fireworks/examples/assets/images/flame/flame02.png",
+            "/static/fireworks/examples/assets/images/flame/flame03.png",
+            "/static/fireworks/examples/assets/images/flame/flame04.png",
+            "/static/fireworks/examples/assets/images/flame/flame05.png",
+            "/static/fireworks/examples/assets/images/flame/flame06.png",
+            "/static/fireworks/examples/assets/images/flame/flame07.png",
+            "/static/fireworks/examples/assets/images/flame/flame08.png",
+            "/static/fireworks/examples/assets/images/flame/flame09.png",
+            "/static/fireworks/examples/assets/images/flame/flame10.png",
+            "/static/fireworks/examples/assets/images/flame/flame11.png",
+            "/static/fireworks/examples/assets/images/flame/flame12.png",
+            "/static/fireworks/examples/assets/images/flame/flame13.png",
+            "/static/fireworks/examples/assets/images/flame/flame14.png",
+            "/static/fireworks/examples/assets/images/flame/flame15.png",
+            "/static/fireworks/examples/assets/images/flame/flame16.png",
+            "/static/fireworks/examples/assets/images/flame/flame17.png",
+            "/static/fireworks/examples/assets/images/flame/flame18.png",
+            "/static/fireworks/examples/assets/images/flame/flame19.png",
+            "/static/fireworks/examples/assets/images/flame/flame20.png",
+            "/static/fireworks/examples/assets/images/flame/flame21.png",
+            "/static/fireworks/examples/assets/images/flame/flame22.png",
+            "/static/fireworks/examples/assets/images/flame/flame23.png",
+            "/static/fireworks/examples/assets/images/flame/flame24.png"
+        ];
+
+
+        loadTremulousParticles(urls, function(images){
+            //console.log("images", images)
+            console.log("all images loaded")
+            var emitter	= Fireworks.createEmitter({nParticles : 400})
+                .bindTriggerDomEvents()
+                .effectsStackBuilder()
+                    .spawnerSteadyRate(60)
+                    .position(Fireworks.createShapeSphere(0, 0, 0, 10))
+                    .velocity(Fireworks.createShapeSphere(800, 0, 0, 150))
+                    .acceleration({
+                        effectId	: 'gravity',
+                        shape		: Fireworks.createShapePoint(0, -180, 0)
+                    })
+                    .lifeTime(1.5)
+                    .randomVelocityDrift(Fireworks.createVector(0, 500, 0))
+                    .createEffect("renderer")
+                        .onRender(function(particle){
+                            var position	= particle.get('position').vector;
+                            var canonAge	= particle.get('lifeTime').normalizedAge();
+                            var imageIdx	= Math.floor(canonAge * (images.length-4));
+                            var image	= images[imageIdx+4];
+
+                            var width	= image.width	* 2;
+                            var height	= image.height	* 2;
+                            var positionX	= position.x - width /2 - 450;
+                            var positionY	= position.y - height/2;
+                            positionX	+= canvas.width /2;
+                            positionY	+= canvas.height/2;
+                            ctx.drawImage(image, positionX, positionY, width, height);
+                        }).back()
+                    .back()
+                .start();
+
+            setInterval(function(){
+                // clear the screen
+                ctx.save();
+                ctx.globalAlpha			= 1;
+                ctx.globalCompositeOperation	= 'copy';
+                ctx.fillStyle = "rgb(0,0,0)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.restore();
+                // set the fillStyle of the particles
+                ctx.fillStyle	= 'rgba(127,0,255, 0.2)';
+
+                // update emitter and render it
+                var deltaTime	= 1/60;
+                emitter.update(deltaTime).render();
+            }, 1000/60);
+        });
+
+
+        //////////////////////////////////////////////////////////////////////////
+        //		misc helpers						//
+        //////////////////////////////////////////////////////////////////////////
+        /**
+         * load all the images, generate an alpha based on luminance.
+         * It would be much better implemented with tQuery.textureutils.js
+        */
+        function loadTremulousParticles(urls, callback){
+            var images	= new Array(urls.length);
+
+            // load all the images and convert them
+            var flow	= Flow();
+            urls.forEach(function(url, idx){
+                flow.par(function(next){
+                    var image	= new Image;
+                    image.onload	= function(){
+                        convertTremulousImage(image, function(resultImage, originalImage){
+                            //console.log("image converted", resultImage);
+                            images[idx]	= resultImage;
+                            next();
+                        });
+                    };
+                    image.src	= url;
+                });
+            });
+
+            // build the function which is run once all is loaded
+            flow.seq(function(){
+                //console.log("all flow completed")
+                // notify the caller
+                callback(images, urls);
+            })
+
+            /**
+             * Convert images from tremulous.
+             * They are originally in .tga without alpha channel.
+             * The alpha channel is created based on the luminance of each pixel.
+             * alpha === luminance*16
+            */
+            function convertTremulousImage(image, callback){
+                // create a canvas
+                var canvas	= document.createElement('canvas');
+                canvas.width	= image.width;
+                canvas.height	= image.height;
+                var ctx		= canvas.getContext('2d');
+                // draw the image in it
+                ctx.drawImage(image, 0, 0);
+
+                // create an alpha channel based on color luminance
+                var imgData	= ctx.getImageData(0, 0, canvas.width, canvas.height);
+                var p		= imgData.data;
+                for(var i = 0, y = 0; y < canvas.height; y++){
+                    for(var x = 0; x < canvas.width; x++, i += 4){
+                        var luminance	= (0.2126*p[i+0]) + (0.7152*p[i+1]) + (0.0722*p[i+2]);
+
+                        luminance	= luminance/255;
+                        //luminance	= luminance * luminance * luminance* luminance;
+                        //luminance	= luminance * luminance;
+                        p[i+3]		= Math.floor(luminance * 16 * 255);
+                        //p[i+3]	= luminance * 4;
+                    }
+                }
+                // put the generated image in the canvas
+                ctx.putImageData(imgData, 0, 0);
+                // produce a Image object based on canvas.toDataURL
+                var newImage	= new Image;
+                newImage.onload	= function(){
+                    // notify the caller
+                    callback(newImage, image);
+                };
+                newImage.src	= ctx.canvas.toDataURL();
+            }
+
+            return;
+
+            // from gowiththeflow.js - https://github.com/jeromeetienne/gowiththeflow.js
+            function Flow(){
+                var self, stack = [], timerId = setTimeout(function(){ timerId = null; self._next(); }, 0);
+                return self = {
+                    destroy : function(){ timerId && clearTimeout(timerId); },
+                    par	: function(callback, isSeq){
+                        if(isSeq || !(stack[stack.length-1] instanceof Array)) stack.push([]);
+                        stack[stack.length-1].push(callback);
+                        return self;
+                    },seq	: function(callback){ return self.par(callback, true);	},
+                    _next	: function(err, result){
+                        var errors = [], results = [], callbacks = stack.shift() || [], nbReturn = callbacks.length, isSeq = nbReturn == 1;
+                        for(var i = 0; i < callbacks.length; i++){
+                            (function(fct, index){
+                                fct(function(error, result){
+                                    errors[index]	= error;
+                                    results[index]	= result;
+                                    if(--nbReturn == 0)	self._next(isSeq?errors[0]:errors, isSeq?results[0]:results)
+                                }, err, result)
+                            })(callbacks[i], i);
+                        }
+                    }
+                }
+            };
+        }
+    });
+</script>
+</body>
+</html>

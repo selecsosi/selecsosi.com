@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% block head_block %}
+{% block title_block %}
+<title>Selecsosi.com</title>
+{% endblock title_block %}
+{% block js_block %}
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!--[if IE]> <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<!--[if lt IE 8]><script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE8.js"></script><![endif]-->  
+{% endblock js_block %}
+{% block css_block %}
+<link rel="stylesheet" type="text/css" href="http://selecsosi.com/static/css/site.css">
+<!--[if lt IE 7]>  <link rel="stylesheet" type="text/css" media="all" href="css/ie6.css"/><![endif]-->
+{% endblock css_block %}
+{% endblock head_block %}
+</head>
+<body>
+<header class="header">
+	{% block header_block %}
+		{% block page_title_block %}
+		<h1>Selecsosi.com</h1>
+		{% endblock page_title_block %} 	
+	{% endblock header_block %}
+	{% block nav_block %}
+	<nav>
+		<ul>
+			<li>Home</li>
+		</ul>
+	</nav>
+	{% endblock nav_block %} 
+</header>
+<div class="content" style="width:100%">
+	{% block content_block %}
+	{% endblock content_block %}
+</div>
+{% block js_footer %}
+{% endblock js_footer %}
+</body>
+</html>

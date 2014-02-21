@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block page_title_block %}
+<h1>Selecsosi.com - Bill Tracker</h1>
+{% endblock page_title_block %} 
+
+{% block nav_block %}
+{% include "bills/shared/nav.html" %}
+{% endblock nav_block %}
+
+{% block content_block %}
+{{ block.super }}
+	<div class="content_title">
+		{% block content_title %}
+		{% endblock content_title %}
+	</div>
+	<div class="center" style="width:60%;float:left;">
+		{% block center_block %}
+		{% endblock center_block %}
+	</div>
+	<div class="right" style="width:22%;float:left;">
+		{% block right_block %}
+		{% endblock right_block %}
+	</div>
+{% endblock content_block %}
+
+
