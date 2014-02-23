@@ -1,30 +1,7 @@
 {% extends "bills/bills_base.html" %}
 
-{% block page_title_block %}
-<h1>Selecsosi.com - Bill Tracker</h1>
-{% endblock page_title_block %} 
-
-{% block content_title %}
-{{ block.super }}
-<h2>Dashboard</h2>
-{% endblock content_title %}
-
-{% block center_block %}
-{{ block.super }}
-{% include "bills/shared/group_list.html" %}
-{% include "bills/shared/transaction_list.html" %}
-{# <p>{{ request }}</p> #}
-{% endblock center_block %}
-
-{% block right_block %}
-{{ block.super }}
-Right Block
-{% endblock right_block %}
-
-{% block js_footer %}
-<script type="text/javascript">
-;(function($){
-	
-})(jQuery);
-</script>
-{% endblock js_footer %}
+{% block content_block %}
+    <h2>Dashboard</h2>
+    {% include "bills/shared/transaction_list.html" %}
+    {% include "bills/shared/group_list.html" %}
+{% endblock content_block %}
