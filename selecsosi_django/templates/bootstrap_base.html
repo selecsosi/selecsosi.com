@@ -38,7 +38,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
                 <li><a href="{% url "bills.views.home.dashboard" %}">Bills</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{% url "web.views.contact" %}">Contact</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -47,10 +47,6 @@
 
 <div class="container">
     {% block content_block %}
-        <div class="starter-template">
-            <h1>Bootstrap starter template</h1>
-            <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-        </div>
     {% endblock content_block %}
 </div><!-- /.container -->
 

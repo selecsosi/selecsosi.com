@@ -48,7 +48,7 @@ def start_new_bill(request):
     elif request.method == "GET":
         form = StartNewBillForm()
         return render_to_response(
-            "bills/bill/start_new_bill.html", {
+            "bill/start_new_bill.html", {
             "form": form,
             },
             context_instance=RequestContext(request))
@@ -74,13 +74,13 @@ def create_1(request):
             request.session["bill_group_id"] = group_id
             #update the completed form_part
             request.session["bill_form_part"] = 2
+            request.session["bill_in_progress"] = True
             return HttpResponseRedirect("/bills/bill/create/2/")
-    elif request.method == "GET":
-        form = ChooseGroupForm()
     else:
-        return HttpResponse('')
+        form = ChooseGroupForm()
+
     return render_to_response(
-        'bills/bill/create.html', {
+        'bill/create.html', {
         'form': form,
         'request': request,
         'form_part': 1,
@@ -96,27 +96,25 @@ def create_2(request):
     """
     group_id = request.session["bill_group_id"]
     if not group_id:
-            return HttpResponseRedirect("/bills/bill/create/")
+        return HttpResponseRedirect("/bills/bill/create/")
 
     ChooseParticipantsForm = get_choose_participants_form_factory(group_id)
     if request.method == "POST":
         form = ChooseParticipantsForm(request.POST)
         if form.is_valid():
             bill_participants_account_ids = form.cleaned_data["participants"]
-            #bill_participants_account_ids = form.cleaned_data["part"]
             bill_type = form.cleaned_data["bill_type"]
             request.session["bill_participants_account_ids"] = bill_participants_account_ids
             request.session["bill_type"] = bill_type
             request.session["bill_form_part"] = 3
             return HttpResponseRedirect("/bills/bill/create/3/")
-    elif request.method == "GET":
-        form = ChooseParticipantsForm()
+
     else:
-        return HttpResponse('')
+        form = ChooseParticipantsForm()
+
     return render_to_response(
-        'bills/bill/create.html', {
+        'bill/create.html', {
             'form': form,
-            'derp': "derp",
             'request': request,
             'form_part': 2,
         },
@@ -225,7 +223,7 @@ def create_3(request):
         footer_form = BillDetailsFootForm()
     else:
         return HttpResponse("")
-    return render_to_response("bills/bill/create_multiform.html",
+    return render_to_response("../templates/bill/create_multiform.html",
         {
             "formset" : [header_form, participation_formset, footer_form],
             "form_part": 3,
@@ -273,167 +271,3 @@ def create(request, form_part="0"):
         print e
         return HttpResponseRedirect("/bills/dashboard/")
 
-
-# @login_required
-# def create(request, form_part=0):
-#     if request.method == "POST":
-#         # Grab the user account
-#         account_id = get_account_id(request)
-#         if "form_part" in request.POST.keys():
-#             form_part = int(request.POST["form_part"])
-#         else:
-#             form_part = 0
-#         # Depending on the posted formpart, construct the form
-#         if form_part == 0:
-#             #form = ChoseGroupForm(request.POST, account_id=account_id)
-#             pass
-#         elif form_part == 1:
-#             group_id = request.session.get("group_id", None)
-#             if group_id:
-#                 #form = ChoseParticipantsForm(request.POST, group_id=group_id, account_id=account_id)
-#                 pass
-#             else:
-#                 # Start them off at the begining
-#                 pass
-#         elif form_part == 2:
-#             write_to_log("request:", request)
-#             form = MyFormSet(request.POST)
-#             write_to_log("form:", form)
-#             for f in form:
-#                 write_to_log("form validation_errors:", f.non_field_errors())
-#         if form.is_valid():
-#             if form_part == 0:
-#                 # group selected, now select participants
-#                 group_id = form.cleaned_data["groups"]
-#                 # set the group id in session
-#                 request.session["group_id"] = group_id
-#                 # new_form = ChoseParticipantsForm(group_id=group_id, account_id=account_id)
-#                 # return render_to_response('bills/bill/create.html',
-#                 #     {
-#                 #         'form': new_form,
-#                 #         'request': request,
-#                 #     },
-#                 #     context_instance=RequestContext(request))
-#             elif form_part == 1:
-#                 participant_ids = form.cleaned_data["participants"]
-#                 bill_type = form.cleaned_data["bill_type"]
-#                 request.session["participants"] = participant_ids
-#                 request.session["bill_type"] = bill_type
-#                 participants = Account.objects.filter(id__in=participant_ids)
-#                 form_set = ParticipationWithDetailsFormset(initial=[{'name': x.user.username, 'account_id': x.id} for x in participants])
-#                 return render_to_response('bills/bill/create.html',
-#                     {
-#                         'form': form_set,
-#                         'request': request,
-#                     },
-#                     context_instance=RequestContext(request))
-#             elif form_part == 2:
-#                 # Grab the two aggregated forms data
-#                 bill_name = request.POST["bill_name"]
-#                 print "The bill is: %s" % bill_name
-#                 bill_note = request.POST["bill_note"]
-#                 group = Group.objects.get(id=request.session["group_id"])
-#                 # schema [account_id, amount_paid]
-#                 line_items = []
-#                 bill_total = Decimal('0.00')
-#                 for f in form.forms:
-#                     if isinstance(f, ParticipationAmountForm):
-#                         if f.is_valid():
-#                             line_items.append([f.cleaned_data["account_id"], f.cleaned_data["amount_paid"]])
-#                             bill_total += f.cleaned_data["amount_paid"]
-#                 with transaction.commit_on_success():
-#                     new_bill = Bill()
-#                     new_bill.group = group
-#                     new_bill.bill_total = bill_total
-#                     new_bill.name = bill_name
-#                     new_bill.note = bill_note
-#                     new_bill.save()
-#                     participant_count = len(list(line_items))
-#
-#                     obligation_amount = bill_total / participant_count
-#                     debtors_list = []
-#                     creditors_list = []
-#                     overpay_total = Decimal('0.00')
-#                     for item in line_items:
-#                         bill_participant = BillParticipant()
-#                         bill_participant.bill = new_bill
-#                         bill_participant.account_id = item[0]
-#                         bill_participant.amount_paid = item[1]
-#                         bill_participant.amount_due = obligation_amount - item[1]
-#                         bill_participant.save()
-#                         if item[1] >= obligation_amount:
-#                             creditors_list.append(item)
-#                             overpay = item[1] - obligation_amount
-#                             overpay_total += overpay
-#                         else:
-#                             debtors_list.append(item)
-#                     for creditor in creditors_list:
-#                         creditor_overpay_amount = creditor[1] - obligation_amount
-#                         if creditor_overpay_amount >= Decimal('0.01'):
-#                             transaction_list = []
-#                             write_to_log("Creditor:",creditor)
-#                             write_to_log("overpay:", creditor_overpay_amount)
-#                             for debtor in debtors_list:
-#                                 creditor_weight = creditor_overpay_amount / overpay_total
-#                                 debtor_underpay_amout = obligation_amount - debtor[1]
-#                                 creditor_owed = debtor_underpay_amout * creditor_weight
-#                                 write_to_log("Debtor:", creditor)
-#                                 write_to_log("debtor_underpay_amout:", debtor_underpay_amout)
-#                                 write_to_log("Debtor:", creditor)
-#                                 write_to_log("creditor_owed:", creditor_owed)
-#                                 new_transaction = Transaction()
-#                                 new_transaction.bill = new_bill
-#                                 new_transaction.group = group
-#                                 new_transaction.from_account_id = debtor[0]
-#                                 new_transaction.to_account_id = creditor[0]
-#                                 new_transaction.amount = creditor_owed
-#                                 new_transaction.amount_remaining = creditor_owed
-#                                 new_transaction.transfer_type = "D"
-#                                 transaction_list.append(new_transaction)
-#                             # Check payment
-#                             paid_total = sum(t.amount for t in transaction_list)
-#                             debt_owed_diff = creditor_overpay_amount - paid_total
-#                             write_to_log("paid_total, debt_owed_diff:", (paid_total, debt_owed_diff))
-#                             if debt_owed_diff != Decimal('0.00'):
-#                                 subtract = False
-#                                 if debt_owed_diff < Decimal('0.00'):
-#                                     debt_owed_diff *= -1
-#                                     subtract = True
-#                                 t_count = 0
-#                                 t_len = len(transaction_list)
-#                                 for i in range(int(100 * debt_owed_diff)):
-#                                     if subtract:
-#                                         transaction_list[t_count].amount -= Decimal('0.01')
-#                                     else:
-#                                         transaction_list[t_count].amount += Decimal('0.01')
-#                                     t_count += 1
-#                                     if t_count >= t_len:
-#                                         t_count = 0
-#                             for t in transaction_list:
-#                                 t.save()
-#
-#                 return HttpResponseRedirect(reverse("bills.views.dashboard"))
-#         else:
-#             return render_to_response('bills/bill/create.html',
-#                 {
-#                     'form': form,
-#                     'request': request,
-#                 },
-#                 context_instance=RequestContext(request))
-#     elif request.method == "GET":
-#         # build start of form
-#         pass
-#     form = ChoseGroupForm(account_id=get_account_id(request))
-#     return render_to_response('bills/bill/create.html', {
-#             'form': form,
-#             'request': request,
-#         },
-#         context_instance=RequestContext(request))
-
-# from pprint import pprint
-#
-#
-# def write_to_log(message, obj):
-#     with open("log.txt", "a") as f:
-#         f.write(message + " :\n")
-#         f.write(str(obj) + "\n")

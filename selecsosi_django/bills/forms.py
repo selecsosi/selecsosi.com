@@ -24,6 +24,7 @@ def get_choose_group_form_factory(account_id):
     choices = [("", "Plese Select")]
     for group in groups:
         choices.append((group.id, group.name))
+
     if len(groups) > 0:
         class ChooseGroupForm(forms.Form):
             group = forms.ChoiceField(choices=choices, validators=[validate_group_choice,], initial=groups[0].id)
@@ -36,7 +37,7 @@ def get_choose_participants_form_factory(group_id):
     choices = [(p.id, p.user.username) for p in group_participants]
     TYPE_CHOICES = (
         ('E', 'Even Split'),
-        ('T', 'Just Tracking')
+        ('L', 'Line Item')
     )
 
     class ChooseParticipantsForm(forms.Form):
@@ -47,34 +48,7 @@ def get_choose_participants_form_factory(group_id):
 
 
 class StartNewBillForm(forms.Form):
-    '''
-    Stub,
-    TODO: move to forms when completed
-    '''
-    pass
-
-
-# class ChoseGroupForm(forms.Form):
-#     groups = forms.ChoiceField(validators)
-#     form_part = forms.IntegerField(widget=HiddenInput, initial=0)
-
-#     def __init__(self, *args, **kwargs):
-#         account_id = kwargs.pop("account_id", None)
-#         super(ChoseGroupForm, self).__init__(*args, **kwargs)
-#         if account_id:
-#             user_account = Account.objects.get(id=account_id)
-#             groups = Group.objects.filter(accounts=user_account)
-#             choices = [("", "Plese Select")] + [(group.id, group.name) for group in groups]
-#             self.fields["groups"].choices = choices
-
-
-# class ChooseParticipantsForm(forms.Form):
-#     CHOICES = (
-#         ('E', 'Even Split'),
-#         ('T', 'Just Tracking')
-#     )
-#     participants = forms.MultipleChoiceField()
-#     bill_type = forms.ChoiceField(choices=CHOICES)
+    start_over = forms.BooleanField("Start Over")
 
 
 class ParticipationAmountForm(forms.Form):
@@ -113,7 +87,6 @@ class ParticipationAmountFormSet(BaseFormSet):
         self.forms.append(BillDetailsFootForm())
 
 
-#MyFormSet = formset_factory(ParticipationAmountForm, formset=ParticipationAmountFormSet, extra=0)
 ParticipationFormset = formset_factory(ParticipationAmountForm, extra=0)
 
 

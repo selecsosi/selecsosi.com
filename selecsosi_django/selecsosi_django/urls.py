@@ -16,5 +16,6 @@ urlpatterns = patterns('',
      url(r'^zoro/', include('zoro.urls')),
      url(r'^bills/', include('bills.urls')),
      #url(r'^drc/', include('drc.urls')),
-     url(r'^$', include('web.urls')),
+     url(r'^contact', 'web.views.contact'),
+     url(r'^$', 'web.views.index'),
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

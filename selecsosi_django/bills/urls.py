@@ -5,6 +5,7 @@ urlpatterns = patterns('bills.views',
     url(r'^dashboard/$', 'home.dashboard'),
     url(r'^bill/create/$', 'bill.create'),
     url(r'^bill/create/(?P<form_part>\d+)/$', 'bill.create'),
+    url(r'^bill/start_new_bill/$', 'bill.start_new_bill'),
     #url(r'^payment/create/$', 'payment.create'),
     #url(r'^.*$', 'index'),
 )

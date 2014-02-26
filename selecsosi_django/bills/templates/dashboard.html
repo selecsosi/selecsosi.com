@@ -1,0 +1,10 @@
+{% extends "bills_base.html" %}
+
+{% block content_block %}
+    <h2>Dashboard</h2>
+    <a href="{% url "bills.views.bill.create" %}" class="btn btn-primary">
+        Create Bill
+    </a>
+    {% include "shared/transaction_list.html" %}
+    {% include "shared/group_list.html" %}
+{% endblock content_block %}

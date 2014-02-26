@@ -1,4 +1,4 @@
-{% extends "bills/bills_base.html" %}
+{% extends "../bills_base.html" %}
 
 {% block js_block %}
 {{ block.super }}
@@ -6,19 +6,22 @@
 {% endblock %}
 
 {% block content_title %}
-<h2>New Bill</h2>
+<h2>New Payment</h2>
 {% endblock content_title %}
 
 {% block center_block %}
 {{ block.super }}
-<form id="create_bill_form" action="/bills/bill/create/{{  form_part }}/" method="post">{% csrf_token %}
+<form id="create_bill_form" action="/bills/payment/create/" method="post">{% csrf_token %}
 	<fieldset id="group_fieldset">
 		{{ form.as_p }}
 	</fieldset>
 	<fieldset class="controls_fieldset">
-        <input type="submit" value="Create Bill" class="submit" />
-        <a class="cancel" href="/bills/dashboard/">Cancel</a>
+        <input type="submit" value="Create Payment" class="submit" />
+        <a class="cancel" href="{% url 'bills.views.dashboard' %}">Cancel</a>
 	</fieldset>
 </form>
 {% endblock center_block %}
 
+{% block right_block %}
+{{ request }}
+{% endblock right_block %}
