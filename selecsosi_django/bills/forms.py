@@ -7,7 +7,6 @@ from .models import Account, Group
 
 from django.core.exceptions import ValidationError
 
-
 def validate_group_choice(value):
     if value is not '':
         try:
@@ -16,7 +15,6 @@ def validate_group_choice(value):
             raise ValidationError('Please select a group')
     else:
         raise ValidationError('Please select a group')
-
 
 def get_choose_group_form_factory(account_id):
     user_account = Account.objects.get(id=account_id)
@@ -37,18 +35,27 @@ def get_choose_participants_form_factory(group_id):
     choices = [(p.id, p.user.username) for p in group_participants]
     TYPE_CHOICES = (
         ('E', 'Even Split'),
-        ('L', 'Line Item')
+        # ('L', 'Line Item'),
     )
 
     class ChooseParticipantsForm(forms.Form):
+
         participants = forms.MultipleChoiceField(choices=choices)
         #part = forms.MultipleChoiceField(label="participants", choices=choices)
         bill_type = forms.ChoiceField(choices=TYPE_CHOICES)
+
+        def clean_participants(self):
+            data = self.cleaned_data['participants']
+            if len(data) < 2:
+                raise forms.ValidationError("You must select at least 2 members")
+
+            return data
+
     return ChooseParticipantsForm
 
 
 class StartNewBillForm(forms.Form):
-    start_over = forms.BooleanField("Start Over")
+    start_over = forms.BooleanField(label="Start Over", required=False)
 
 
 class ParticipationAmountForm(forms.Form):
@@ -75,8 +82,6 @@ class ParticipationAmountFormSet(BaseFormSet):
     Formset that passes the HttpRequest on to every Form's __init__
     Suitable to populate Fields dynamically depending on request
     """
-    def __init__(self, *args, **kwargs):
-        super(ParticipationAmountFormSet, self).__init__(*args, **kwargs)  # this calls _construct_forms()
 
     def _construct_forms(self):  # this one is merely taken from django's BaseFormSet
         # except the additional request parameter for the Form-constructor

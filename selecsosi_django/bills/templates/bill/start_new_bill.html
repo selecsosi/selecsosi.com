@@ -5,13 +5,16 @@
 <h2>Start New Bill</h2>
 
     <div class="panel panel-default">
+        <div class="panel-heading">
+            You currently have a bill in progress, check "Start Over" to begin a new bill
+        </div>
         <div class="panel-body">
             <form role="form" id="create_bill_form" action="/bills/bill/start_new_bill/" method="post">{% csrf_token %}
                 <fieldset id="group_fieldset">
                     {{ form|bootstrap }}
                 </fieldset>
                 <fieldset class="controls_fieldset">
-                    <input type="submit" value="Submit" class="submit" />
+                    <input type="submit" value="Submit" class="submit btn btn-primary" />
                     <a class="cancel" href="{% url "bills.views.home.dashboard" %}">Cancel</a>
                 </fieldset>
             </form>

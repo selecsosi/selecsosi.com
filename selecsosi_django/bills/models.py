@@ -45,19 +45,17 @@ class BillParticipant(models.Model):
     modified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        if self.amount_due <= 0:
-            due = Decimal(0.00)
-        else:
+        due = Decimal(0.00)
+        if self.amount_due > 0:
             due = self.amount_due
         return "%s - %s - due: $%0.2f" % (self.created, self.account.user.username, due)
 
 
 class Transaction(models.Model):
     '''
-    For back and forth evening of debts
+    Ledger Entries
     '''
     TRANSACTION_CHOICES = (
-        ("P", "Payment"),
         ("D", "Debit"),
         ("C", "Credit"),
     )
@@ -70,8 +68,8 @@ class Transaction(models.Model):
     transfer_type = models.CharField("Type", choices=TRANSACTION_CHOICES, max_length=2)
     created = models.DateTimeField(auto_now=True)
     modified = models.DateTimeField(auto_now_add=True)
+    # Tag for transactions to reference if they are in repayment (optional)
     original_transaction = models.ForeignKey('self', null=True, blank=True)
-    amount_remaining = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return "%s - %s -> %s - amount: $%0.2f" % (self.transfer_type, self.from_account.user.username, self.to_account.user.username, self.amount)

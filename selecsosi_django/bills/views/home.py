@@ -16,11 +16,11 @@ def index(request):
 def dashboard(request):
     account = Account.objects.get(user=request.user)
     groups = Group.objects.filter(accounts=account)
-    transactions = Transaction.objects.filter(Q(to_account=account) | Q(from_account=account))
+    transactions = Transaction.objects.filter(Q(to_account=account) | Q(from_account=account))[:10 ]
     d = {
         'groups': groups,
         'transactions': transactions,
     }
-    return render_to_response('../templates/dashboard.html',
+    return render_to_response('bill/dashboard.html',
         d,
         context_instance=RequestContext(request))

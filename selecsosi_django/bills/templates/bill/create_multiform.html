@@ -1,16 +1,21 @@
 {% extends "bills_base.html" %}
+{% load bootstrap %}
 
 {% block content_block %}
-<h2>New Bill</h2>
-<form id="create_bill_form" action="/bills/bill/create/{{ form_part }}/" method="post">{% csrf_token %}
-    {% for form in formset %}
-	<fieldset id="group_fieldset">
-		{{ form.as_p }}
-	</fieldset>
-    {% endfor %}
-	<fieldset class="controls_fieldset">
-        <input type="submit" value="Create Bill" class="submit" />
-        <a class="cancel" href="{% url "bills.views.home.dashboard" %}">Cancel</a>
-	</fieldset>
-</form>
+    <h2>{{ title }}</h2>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form id="create_bill_form" action="/bills/bill/create/{{ form_part }}/" method="post">{% csrf_token %}
+                {% for form in formset %}
+                    <fieldset id="group_fieldset">
+                        {{ form|bootstrap }}
+                    </fieldset>
+                {% endfor %}
+                <fieldset class="controls_fieldset">
+                    <input type="submit" value="Create Bill" class="submit btn btn-primary" />
+                    <a class="cancel" href="{% url "bills.views.home.dashboard" %}">Cancel</a>
+                </fieldset>
+            </form>
+        </div>
+    </div>
 {% endblock content_block %}

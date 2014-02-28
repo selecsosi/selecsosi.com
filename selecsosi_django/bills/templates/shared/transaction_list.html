@@ -1,8 +1,10 @@
 <div class="transactions">
-	<h2>Transactions</h2>
-	{% for transaction in transactions %}
-	<a href="{% url "bills.views.home.dashboard" %}">
-        {{ transaction.modified }} {{transaction.transfer_type }} {{transaction.note|slice:":80" }} {{ transaction.amount }}
-	</a>
-	{% endfor %}
+    <h2>Transactions</h2>
+    {% for transaction in transactions %}
+        <div >
+            <a href="{% url "bills.views.home.dashboard" %}">
+                {{ transaction.modified }} {{transaction.transfer_type }} {{ transaction.amount }} {{ transaction.from_account }} -> {{ transaction.to_account }} {{transaction.note|slice:":80" }}
+            </a>
+        </div>
+    {% endfor %}
 </div>
