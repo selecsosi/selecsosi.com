@@ -1,5 +1,34 @@
 {% extends "bills_base.html" %}
-
+{% load bills_extras %}
 {% block content_block %}
-    {{ object }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Reciept</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Bill</td>
+            <td>{{ transaction.bill.name }}</td>
+        </tr>
+        <tr>
+            <td>Group</td>
+            <td>{{ transaction.group.name }}</td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td>${{ transaction.amount }}</td>
+        </tr>
+        <tr>
+            <td>To</td>
+            <td>{{ transaction.to_account.user.email }}</td>
+        </tr>
+        <tr>
+            <td>From</td>
+            <td>{{ transaction.from_account.user.email }}</td>
+        </tr>
+        </tbody>
+    </table>
+
 {% endblock content_block %}

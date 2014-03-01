@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
-from .views.bill.transaction import TransactionDetailView, TransactionListView
-from .views.bill.groups import GroupListView, GroupDetailView
+from .views.transaction import TransactionDetailView, TransactionListView
+from .views.groups import GroupListView, GroupDetailView
 
 urlpatterns = patterns('bills.views',
     url(r'^$', 'home.index'),

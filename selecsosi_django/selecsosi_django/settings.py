@@ -130,6 +130,7 @@ INSTALLED_APPS = (
     # 'south',
     'bootstrapform',
     'debug_toolbar',
+    'django_nvd3',
     'web',
     'gps',
     'bills',

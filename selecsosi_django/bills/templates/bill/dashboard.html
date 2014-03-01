@@ -5,6 +5,8 @@
     <a href="{% url "bills.views.bill.create.index" %}" class="btn btn-primary">
         Create Bill
     </a>
+    <h3>Owed: {{ owed }}</h3>
+    <h3>Balance: {{ balancd }}</h3>
     <h2>Transactions</h2>
     {% include "shared/transaction_list.html" %}
     <h2>Groups</h2>
