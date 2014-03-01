@@ -2,9 +2,11 @@
 
 {% block content_block %}
     <h2>Dashboard</h2>
-    <a href="{% url "bills.views.bill.create" %}" class="btn btn-primary">
+    <a href="{% url "bills.views.bill.create.index" %}" class="btn btn-primary">
         Create Bill
     </a>
+    <h2>Transactions</h2>
     {% include "shared/transaction_list.html" %}
+    <h2>Groups</h2>
     {% include "shared/group_list.html" %}
 {% endblock content_block %}

@@ -82,7 +82,6 @@ class ParticipationAmountFormSet(BaseFormSet):
     Formset that passes the HttpRequest on to every Form's __init__
     Suitable to populate Fields dynamically depending on request
     """
-
     def _construct_forms(self):  # this one is merely taken from django's BaseFormSet
         # except the additional request parameter for the Form-constructor
         self.forms = []

@@ -1,0 +1,9 @@
+{% extends "bills_base.html" %}
+
+{% block content_block %}
+    <ul>
+        {% for group in object_list %}
+            <li>{{ group }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content_block %}

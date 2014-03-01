@@ -88,7 +88,9 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -127,6 +129,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     # 'south',
     'bootstrapform',
+    'debug_toolbar',
     'web',
     'gps',
     'bills',

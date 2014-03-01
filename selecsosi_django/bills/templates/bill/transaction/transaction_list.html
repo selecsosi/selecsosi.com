@@ -1,0 +1,9 @@
+{% extends "bills_base.html" %}
+
+{% block content_block %}
+    <ul>
+        {% for transaction in object_list %}
+            <li>{{ transaction }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content_block %}
