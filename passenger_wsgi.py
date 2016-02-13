@@ -1,12 +1,15 @@
 import sys, os
-INTERP = "/home/selecsosi/opt/python-2.7.3/bin/python"
-if sys.executable != INTERP: os.execl(INTERP, INTERP, *sys.argv)
+cwd = os.getcwd()
+sys.path.append(cwd)
+sys.path.append(cwd + '/selecsosi_django')  #You must add your project here
 
-# sys.path.append(os.getcwd())
-sys.path.append(os.path.join(os.getcwd(), 'selecsosi_django'))
+#Switch to new python
+if sys.version < "2.7.7": os.execl(cwd+"/env/bin/python", "python2.7", *sys.argv)
+
+sys.path.insert(0,cwd+'/env/bin')
+sys.path.insert(0,cwd+'/env/lib/python2.7/site-packages/django')
+sys.path.insert(0,cwd+'/env/lib/python2.7/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = "selecsosi_django.settings"
-
-import django.core.handlers.wsgi
-application = django.core.handlers.wsgi.WSGIHandler()
-
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
