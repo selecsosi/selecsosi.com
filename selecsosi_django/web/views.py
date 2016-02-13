@@ -1,6 +1,22 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-# Create your views here.
-def index(request):
-    return render_to_response('bootstrap_base.html', {}, context_instance=RequestContext(request))
+from django.views.generic import TemplateView
+
+
+class JsAppView(TemplateView):
+    template_name = None
+    app_name = None
+
+    def get_context_data(self, **kwargs):
+        return {
+            "app_name": self.get_app_name(),
+            "js_context": {}
+        }
+
+    def get_app_name(self):
+        return self.app_name
+
+
+class IndexView(JsAppView):
+    template_name = "index.html"
+    app_name = "index"

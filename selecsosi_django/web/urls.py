@@ -1,13 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url
+from . import views
 
-
-urlpatterns = patterns('web.views',
-    # Examples:
-    # url(r'^selecsosi_django/', include('selecsosi_django.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-     url(r'', 'index', name='index'),
-)
+urlpatterns = [
+     url(r'', views.IndexView.as_view(), name='index'),
+]

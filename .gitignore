@@ -41,3 +41,7 @@ settings_local.py
 .git.bak
 selecsosi_django/gps/data
 env/
+selecsosi_django/bin
+selecsosi_django/node_modules
+selecsosi_django/static
+*.db

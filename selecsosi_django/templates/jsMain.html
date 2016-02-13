@@ -1,0 +1,15 @@
+{% load staticfiles %}
+
+<script type="text/javascript">
+    {% if js_context %}
+        var PAGE_CONTEXT = JSON.stringify({{ js_context|safe }});
+    {% else %}
+        var PAGE_CONTEXT = {};
+    {% endif %}
+</script>
+
+{% if app_name %}
+    {% with "js/main."|addstr:app_name|addstr:".js" as app_main %}
+        <script src="{% static app_main %}"></script>
+    {% endwith %}
+{% endif %}
