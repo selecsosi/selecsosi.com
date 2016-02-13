@@ -2,6 +2,7 @@ public/*
 !public/media
 !public/static
 public/media/csv
+public/static/csv
 tmp/
 *.com
 *.class
@@ -39,3 +40,4 @@ Thumbs.db
 settings_local.py
 .git.bak
 selecsosi_django/gps/data
+env/
