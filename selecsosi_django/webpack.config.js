@@ -14,13 +14,13 @@ var paths = {
 // Create an entrypoint for each .js file in /mains dir
 var entryPoints = {};
 fs.readdirSync(paths.SOURCE + "/mains").forEach(function(filename) {
-    var stripped = filename.replace(/\.js$/, "");
+    var stripped = filename.replace(/\.(js|jsx)$/, "");
     if (stripped !== filename) {
         entryPoints[stripped] = "mains/" + filename;
     }
 });
 
-var config = module.exports = {
+module.exports = {
     context: paths.SOURCE,    // Path for resolving entry point modules
     entry: entryPoints,
     output: {
@@ -42,7 +42,10 @@ var config = module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                query: {
+                    presets:['es2015', 'react']
+                }
             }
         ],
         /*
@@ -69,11 +72,11 @@ var config = module.exports = {
         new BundleTracker({
             filename: './webpack-stats.json'
         }),
-        //new webpack.optimize.CommonsChunkPlugin({   // TODO: more granular commons chunking
-        //    name: "common",
-        //    filename: "common.js",
-        //    minChunks: 3    // If at least 3 chunks require a module, put it in common.
-        //}),
+        new webpack.optimize.CommonsChunkPlugin({   // TODO: more granular commons chunking
+            name: "common",
+            filename: "common.js",
+            minChunks: 3    // If at least 3 chunks require a module, put it in common.
+        }),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new webpack.ProvidePlugin({
             $: "jquery",

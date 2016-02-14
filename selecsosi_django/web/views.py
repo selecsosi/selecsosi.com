@@ -18,5 +18,5 @@ class JsAppView(TemplateView):
 
 
 class IndexView(JsAppView):
-    template_name = "index.html"
+    template_name = "web/index.html"
     app_name = "index"

@@ -1,5 +1,10 @@
+import sys
+import os
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ADMINS = (
     ('Sam Lahti', 'sam.lahti@gmail.com'),
@@ -20,6 +25,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+APPEND_SLASH = True
 
 MEDIA_URL = '/media/'
 

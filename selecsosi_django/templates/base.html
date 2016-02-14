@@ -7,23 +7,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Sam Lahti">
     {% block head_block %}
-        <title>{% block title_block %}Selecsosi.com{% endblock title_block %}</title>
-        {% block js_head %}
-            <script type="text/javascript" src="{% static "jquery/jquery-2.2.0.js" %}"></script>
-        {% endblock js_head %}
+        <title>{% block title_block %}selecsosi.com{% endblock title_block %}</title>
         {% block css_block %}
             <link rel="stylesheet" type="text/css" href="{% static "css/site.css" %}">
         {% endblock css_block %}
+        {% block js_head %}{% endblock js_head %}
     {% endblock head_block %}
 </head>
 <body>
-<div class="content">
-	{% block content_block %}
-	{% endblock content_block %}
-</div>
+    <div class="site-wrapper">
+        {% block nav_block %}
+            {% include "navbar.html" %}
+        {% endblock nav_block %}
+        <div class="content">
+            {% block content_block %}
+            {% endblock content_block %}
+        </div>
+    </div>
 {% block js_footer %}
+    <script type="text/javascript" src="{% static "jquery/jquery-2.2.0.js" %}"></script>
+    <script src="{% static "bootstrap/js/bootstrap.min.js"  %}"></script>
+    <script src="{% static "js/common.js"  %}"></script>
 {% endblock js_footer %}
 </body>
 </html>
