@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
+{% block title_block %}{{ app_name }}{% endblock title_block %}
+
 {% block content_block %}
     <div id="react-app"></div>
 {% endblock content_block %}
 
 {% block js_footer %}
     {{ block.super }}
-    <script src="{% static "js/main.index.js" %}"></script>
+    {% include "jsMain.html" %}
 {% endblock js_footer %}

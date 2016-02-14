@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load staticfiles web_tags %}
 
 <script type="text/javascript">
     {% if js_context %}
@@ -8,8 +8,6 @@
     {% endif %}
 </script>
 
-{% if app_name %}
-    {% with "js/main."|addstr:app_name|addstr:".js" as app_main %}
-        <script src="{% static app_main %}"></script>
-    {% endwith %}
+{% if app_main %}
+    <script src="{% static app_main %}"></script>
 {% endif %}

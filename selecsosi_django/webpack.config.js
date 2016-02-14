@@ -14,7 +14,7 @@ var paths = {
 // Create an entrypoint for each .js file in /mains dir
 var entryPoints = {};
 fs.readdirSync(paths.SOURCE + "/mains").forEach(function(filename) {
-    var stripped = filename.replace(/\.(js|jsx)$/, "");
+    var stripped = filename.replace(/\.(js|jsx|ts)$/, "");
     if (stripped !== filename) {
         entryPoints[stripped] = "mains/" + filename;
     }
@@ -46,6 +46,10 @@ module.exports = {
                 query: {
                     presets:['es2015', 'react']
                 }
+            },
+            {
+                test: /\.ts$/,
+                loader: 'ts-loader'
             }
         ],
         /*
@@ -57,7 +61,7 @@ module.exports = {
     resolve: {
         root: [paths.SOURCE, paths.VENDOR],
         modulesDirectories: ['node_modules', 'bower_components'],
-        extensions: ['', '.js', '.jsx'],
+        extensions: ['', '.ts', '.jsx', '.js'],
         alias: {
             underscore: "lodash"
         }
@@ -66,7 +70,8 @@ module.exports = {
     // These values are assumed to be in the global scope on the page, so we don't need to bundle them
     externals: {
         "jquery": "jQuery",
-        "bootstrap": "bootstrap"
+        "bootstrap": "bootstrap",
+        "lodash": "lodash"
     },
     plugins: [
         new BundleTracker({
@@ -81,7 +86,6 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            bootstrap: "bootstrap",
             _: "lodash"
         })
     ]

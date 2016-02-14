@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                         "assets/less"
                     ],
                     compile: true,
-                    //compress: true,
+                    compress: true,
                     //yuicompress: true,
                     optimization: 2
                 },

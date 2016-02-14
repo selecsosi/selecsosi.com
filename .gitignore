@@ -45,3 +45,4 @@ selecsosi_django/bin
 selecsosi_django/node_modules
 selecsosi_django/static
 *.db
+selecsosi_django/typings
