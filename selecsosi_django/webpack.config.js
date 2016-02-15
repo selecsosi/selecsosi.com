@@ -14,7 +14,7 @@ var paths = {
 // Create an entrypoint for each .js file in /mains dir
 var entryPoints = {};
 fs.readdirSync(paths.SOURCE + "/mains").forEach(function(filename) {
-    var stripped = filename.replace(/\.(js|jsx|ts)$/, "");
+    var stripped = filename.replace(/\.(jsx?|tsx?)$/, "");
     if (stripped !== filename) {
         entryPoints[stripped] = "mains/" + filename;
     }
@@ -48,7 +48,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.ts$/,
+                test: /\.tsx?$/,
                 loader: 'ts-loader'
             }
         ],
@@ -61,7 +61,7 @@ module.exports = {
     resolve: {
         root: [paths.SOURCE, paths.VENDOR],
         modulesDirectories: ['node_modules', 'bower_components'],
-        extensions: ['', '.ts', '.jsx', '.js'],
+        extensions: ['', '.ts', '.tsx', '.jsx', '.js'],
         alias: {
             underscore: "lodash"
         }
