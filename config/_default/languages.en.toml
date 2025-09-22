@@ -1,0 +1,20 @@
+disabled = false
+languageCode = "en"
+languageName = "English"
+weight = 1
+title = "Selecsosi.com"
+
+[params]
+displayName = "EN"
+isoCode = "en"
+rtl = false
+dateFormat = "2 January 2006"
+
+[params.author]
+name = "Sam Lahti"
+image = "img/samlahti.png"
+headline = "Wrangle Complexity. Embrace Constraints. Build What Matters."
+bio = "A little bit about me"
+# links = [
+#   { twitter = "https://twitter.com/username" }
+# ]
